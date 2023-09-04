@@ -24,7 +24,7 @@ pipeline {
       steps {
         echo 'Packaging....'
         sh 'npm run package'
-
+        archiveArtifacts '**/distribution/*.zip'
       }
     }
 
