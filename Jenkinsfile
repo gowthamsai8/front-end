@@ -43,7 +43,7 @@ npm run package'''
       }
     }
 
-    stage('error') {
+    stage('docker build and publish') {
       agent any
       steps {
         script {
