@@ -23,7 +23,8 @@ pipeline {
       }
       steps {
         echo 'Testing..'
-        sh 'npm test'
+        sh '''npm install
+npm test'''
       }
     }
 
@@ -36,12 +37,13 @@ pipeline {
       }
       steps {
         echo 'Packaging....'
-        sh 'npm run package'
+        sh '''npm install
+npm run package'''
         archiveArtifacts '**/distribution/*.zip'
       }
     }
 
-    stage('') {
+    stage('error') {
       agent any
       steps {
         script {
