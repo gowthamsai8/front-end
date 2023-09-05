@@ -1,12 +1,13 @@
 pipeline {
-  agent {
-    docker {
-      image 'schoolofdevops/node:4-alpine'
-    }
-
-  }
+  agent none
   stages {
     stage('Build') {
+      agent {
+        docker {
+          image 'schoolofdevops/node:4-alpine'
+        }
+
+      }
       steps {
         echo 'Building..'
         sh 'npm install'
@@ -14,6 +15,12 @@ pipeline {
     }
 
     stage('Test') {
+      agent {
+        docker {
+          image 'schoolofdevops/node:4-alpine'
+        }
+
+      }
       steps {
         echo 'Testing..'
         sh 'npm test'
@@ -21,6 +28,12 @@ pipeline {
     }
 
     stage('Package') {
+      agent {
+        docker {
+          image 'schoolofdevops/node:4-alpine'
+        }
+
+      }
       steps {
         echo 'Packaging....'
         sh 'npm run package'
@@ -28,8 +41,22 @@ pipeline {
       }
     }
 
+    stage('') {
+      agent any
+      steps {
+        script {
+          docker.withRegistry('https://index.docker.io/v1/', 'dockerlogin') {
+            def dockerImage = docker.build("gowthams96/frontend:v${env.BUILD_ID}", "./")
+            dockerImage.push()
+            dockerImage.push("latest")
+          }
+        }
+
+      }
+    }
+
   }
- tools {
+  tools {
     nodejs 'NodeJS 4.8.6'
   }
 }
